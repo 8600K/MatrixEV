@@ -14,10 +14,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf.urls import handler404
 from django.urls import include, path
+from home.views import custom_404
+
 
 urlpatterns = [
+    path('esports/', include('esports.urls')),
     path('', include('home.urls')),
     path("admin/", admin.site.urls),
-    path("", include('admin_gradient.urls'))
+    path("", include('admin_gradient.urls')),
 ]
+
+handler404 = custom_404

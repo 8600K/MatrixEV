@@ -1,0 +1,571 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<!-- <script src="../esports../templates/resources/esports.js" type="text/javascript"/></script> -->
+<script>
+    document.body.classList.toggle("dark", localStorage.theme==="dark")
+</script>
+
+<!-- [ Main Content ] start -->
+<div>
+    <aside class="aside-ads">
+        <p class="text-white">
+            {% include 'includes/ad_bar.html' %}
+        </p>
+    </aside>
+    
+    <div class="row">
+        <!-- order-card start -->
+        
+        
+        <div class="col-md-6 col-xl-5">
+            <div class="card bg-c-fuschia order-card">
+                <div class="card-body">
+                    {% if day_pick %}
+                    <h6 class="text-white">Pick of the Day</h6>
+
+                    <!-- This is how to get the {{league_scores|length}} length of the list.-->
+
+                    <h4 class="text-center text-white"><span>{{ day_pick.1 }} VS {{ day_pick.2 }}</span></h4>
+                    <h6 class="text-center text-white"><span>{{ day_pick.3 }} ---------- Decimal ---------- {{ day_pick.4 }}</span></h6>
+                    <h6 class="text-center text-white"><span>{{ day_pick.5 }}% ---------- Probability ---------- {{ day_pick.6 }}%</span></h6>
+                    <h6 class="text-center text-white"><span>{{ day_pick.7 }} ---------- EV ---------- {{ day_pick.8 }}</span></h6>
+                    <h6 class="text-center text-white"><span>{{ day_pick.9 }} ---------- Website ---------- {{ day_pick.10 }}</span></h6>
+                    <!-- <p class="m-b-0">American Odds<span class="float-end">351</span></p> -->
+                    <!-- <input type="button" onclick="rotateTextRemove();" name="ok" value="Click Me"/> -->
+                    <!--<input type="button" id="dark-mode-toggle" class="dark-mode-toggle" name="ok" value="Toggle Theme"/> -->
+                    <div class="form-check form-switch mb-2">
+                        <input type="checkbox" class="form-check-input input-primary" id="odds-switch" onclick="convertOdds();">
+                        <label class="form-check-label" for="odds-switch" id="odds-text">Decimal Odds</label>
+                        </div>
+                    {% else %}
+                    <h6 class="text-white">Pick of the Day</h6>
+
+                    <!-- This is how to get the {{league_scores|length}} length of the list.-->
+
+                    <h2 class="text-end text-white"><i class="feather icon-truck float-start"></i><span>Error loading pick of the day. Try again later.</span></h2>
+                    <!-- <p class="m-b-0">American Odds<span class="float-end">351</span></p> -->
+                    <!-- <input type="button" onclick="rotateTextRemove();" name="ok" value="Click Me"/> -->
+                    <!--<input type="button" id="dark-mode-toggle" class="dark-mode-toggle" name="ok" value="Toggle Theme"/> -->
+                    <div class="form-check form-switch mb-2">
+                        <input type="checkbox" class="form-check-input input-primary" id="odds-switch" onclick="convertOdds();">
+                        <label class="form-check-label" for="odds-switch" id="odds-text">Decimal Odds</label>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        
+
+        <div class="col-md-9">
+            <div class="card table-card" >
+                <div class="card-header dark-mode-toggle">
+                    <h5>League of Legends Bets</h5>
+                    <div class="card-header-right">
+                        <!-- Maybe reactivate this and use the reload feature. For now disabled.
+                        <div class="btn-group card-option">
+                            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="feather icon-more-horizontal"></i>
+                            </button>
+                            <ul class="list-unstyled card-option dropdown-menu dropdown-menu-end">
+                                <li class="dropdown-item full-card"><a href="#"><span><i class="feather icon-maximize"></i> maximize</span><span style="display:none"><i class="feather icon-minimize"></i> Restore</span></a></li>
+                                <li class="dropdown-item minimize-card"><a href="#"><span><i class="feather icon-minus"></i> collapse</span><span style="display:none"><i class="feather icon-plus"></i> expand</span></a></li>
+                                <li class="dropdown-item reload-card"><a href="#"><i class="feather icon-refresh-cw"></i> reload</a></li>
+                                <li class="dropdown-item close-card"><a href="#"><i class="feather icon-trash"></i> remove</a></li>
+                            </ul>
+                        </div>
+                        -->
+                    </div>
+                    <ul class="nav nav-pills nav-fill mt-3 border-bottom pb-3" id="pills-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true"><i class="feather icon-hash m-r-5"></i> Spread</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false"><i class="feather icon-award m-r-5"></i> Win</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false"><i class="feather icon-plus m-r-5"></i> Total</a>
+                        </li>
+                        <!--<li class="nav-item">
+                            <a class="nav-link" id="pills-news-tab" data-bs-toggle="pill" href="#pills-news" role="tab" aria-controls="pills-news" aria-selected="false"><i class="feather icon-chevrons-up m-r-5"></i> Best</a>
+                        </li> -->
+                    </ul>
+                </div>
+                <div class="card-body p-0">
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                            <div class="table-responsive">
+                                <div class="customer-scroll" style="height:362px;position:relative;">
+                                    <table class="table table-hover m-b-0">
+                                        <thead>
+                                            <tr class="dark-mode">
+                                                <th><span>Teams</span></th>
+                                                <th>
+                                                    <div class="ctooltip">
+                                                        <span class="ctooltiptext">Maximum Spreads</span>
+                                                        <span>Spread <a class="help" ><i class="feather icon-help-circle f-16"></i></a></span>
+                                                    </div>
+        
+                                                </th>
+                                                <th>
+                                                    <div class="ctooltip">
+                                                        <span class="ctooltiptext">True Probability Averaged</span>
+                                                        <span>Probability <a class="help" ><i class="feather icon-help-circle f-16"></i></a></span>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="ctooltip">
+                                                        <span class="ctooltiptext">Expected Value Averaged</span>
+                                                        <span>EV <a class="help" ><i class="feather icon-help-circle f-16"></i></a></span>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="ctooltip">
+                                                        <span class="ctooltiptext">Website(s) with Highest Payout</span>
+                                                        <span>Website <a class="help" ><i class="feather icon-help-circle f-16"></i></a></span>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="ctooltip">
+                                                        <span class="ctooltiptext">All date times in 24 hour format </span>
+                                                        <span>Date <a class="help" ><i class="feather icon-help-circle f-16"></i></a></span>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        
+                                        {% if spread_zip %}
+                                            {% for spread, spread1_ev_int, spread2_ev_int, spread1_decimal_int, spread2_decimal_int in spread_zip %}
+                                            
+                        
+                                            <tbody>
+                                                <tr>
+                                                    <td rowspan="2"> {{ spread.team1 }} <br> VS <br> 
+                                                        {{ spread.team2 }}</td>
+                                                        <td class="scores-spread" id="score-spread"> ({{spread.spread1_ou}})
+                                                            <span id="spread-text" class="ml12" > {{ spread.spread1_decimal }} </span>
+                                                            <div class="progress mt-1" style="height:4px;">
+                                                                <div class="progress-bar bg-danger rounded" role="progressbar" style="width: {{ spread1_decimal_int }}%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                            </div>
+                                                        </td>
+        
+                                                    </td>
+                                                    <td id="probability-1"> {{ spread.spread1_probability }}%
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-primary rounded" role="progressbar" style="width: {{ spread.spread1_probability }}%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    {% if spread.spread1_ev > 0 %}
+                                                    <td> {{ spread.spread1_ev }}
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-success rounded" role="progressbar" style="width: {{ spread1_ev_int }}%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    {% else %}
+                                                    <td> {{ spread.spread1_ev }}
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-danger rounded" role="progressbar" style="width: {{ spread1_ev_int }}%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    {% endif %}
+                                                    <td> {{ spread.spread1_site }}
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-info rounded" role="progressbar" style="width: 100%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td> {{ spread.date }}
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-warning rounded" role="progressbar" style="width: 100%;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <!-- Row 2 -->
+                                                <tr>
+                                                    <td class="scores-spread" id="score-spread"> ({{ spread.spread2_ou }})
+                                                        <span id="spread-text">  {{ spread.spread2_decimal }}</span>
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-danger rounded" role="progressbar" style="width: {{ spread2_decimal_int }}%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td id="probability-2"> {{ spread.spread2_probability }}% 
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-primary rounded" role="progressbar" style="width: {{ spread.spread2_probability }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    {% if spread.spread2_ev > 0 %}
+                                                    <td> {{ spread.spread2_ev }}
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-success rounded" role="progressbar" style="width: {{ spread2_ev_int }}%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    {% else %}
+                                                    <td> {{ spread.spread2_ev }}
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-danger rounded" role="progressbar" style="width: {{ spread2_ev_int }}%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    {% endif %}
+                                                    <td> {{ spread.spread2_site }}
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-info rounded" role="progressbar" style="width: 100%;"  aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td> <!-- Second date used to be here. Probably just make this date, and maybe make the bar based upon how close or how far time.now is from the actual event. -->
+                                                        <div>
+                                                            <div></div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            {% endfor %}
+                                        {% endif %}       
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- WIN TABLE -->
+        
+                        
+        
+                        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                            <div class="table-responsive">
+                                <div class="customer-scroll1" style="height:362px;position:relative;">
+                                    <table class="table table-hover m-b-0">
+                                        <thead>
+                                            <tr class="dark-mode">
+                                                <th><span>Teams</span></th>
+                                                <th>
+                                                    <div class="ctooltip">
+                                                        <span class="ctooltiptext">Maximum Spreads</span>
+                                                        <span>Spread <a class="help" ><i class="feather icon-help-circle f-16"></i></a></span>
+                                                    </div>
+        
+                                                </th>
+                                                <th>
+                                                    <div class="ctooltip">
+                                                        <span class="ctooltiptext">True Probability Averaged</span>
+                                                        <span>Probability <a class="help" ><i class="feather icon-help-circle f-16"></i></a></span>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="ctooltip">
+                                                        <span class="ctooltiptext">Expected Value Averaged</span>
+                                                        <span>EV <a class="help" ><i class="feather icon-help-circle f-16"></i></a></span>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="ctooltip">
+                                                        <span class="ctooltiptext">Website(s) with Highest Payout</span>
+                                                        <span>Website <a class="help" ><i class="feather icon-help-circle f-16"></i></a></span>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="ctooltip">
+                                                        <span class="ctooltiptext">All date times in 24 hour format </span>
+                                                        <span>Date <a class="help" ><i class="feather icon-help-circle f-16"></i></a></span>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        
+                                            
+                                        {% if win_zip %}
+                                        <!-- TODO Documentation. Make it clear what all these do. -->
+                                            {% for win, win1_ev_int, win2_ev_int, win1_decimal_int, win2_decimal_int in win_zip %}     
+                                        <!--  Win Tbody -->
+                                            <tbody>
+                                                <tr>
+                                                    <td rowspan="2"> {{ win.team1 }} <br> VS <br> {{ win.team2 }}
+                                                        </td>
+                                                        <td class="scores-win" id="scores-win">
+                                                            <span id="win-text" class="ml12" > {{ win.win1_decimal }} </span> 
+                                                            <div class="progress mt-1" style="height:4px;"> 
+                                                                <div class="progress-bar bg-danger rounded" role="progressbar" style="width: {{ win1_decimal_int }}%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                            </div>
+                                                        </td>
+        
+                                                    </td>
+                                                    <td id="probability-1"> {{ win.win1_probability }}%
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-primary rounded" role="progressbar" style="width: {{ win.win1_probability }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    {% if win.win1_ev > 0 %}
+                                                    <td> {{ win.win1_ev }}
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-success rounded" role="progressbar" style="width: {{ win1_ev_int }}%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    {% else %}
+                                                    <td> {{ win.win1_ev }}
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-danger rounded" role="progressbar" style="width: {{ win1_ev_int }}%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    {% endif %}
+                                                    <td> {{ win.win1_site }}
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-info rounded" role="progressbar" style="width: 100%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td> {{ win.date }}
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-warning rounded" role="progressbar" style="width: 100%;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <!-- Row 2 -->
+                                                <tr>
+                                                    <td class="scores-win" id="scores-win">
+                                                        <span id="win-text"> {{ win.win2_decimal }} </span> 
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-danger rounded" role="progressbar" style="width: {{ win2_decimal_int }}%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td id="probability-2"> {{ win.win2_probability }}%
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-primary rounded" role="progressbar" style="width: {{win.win2_probability }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    {% if win.win2_ev > 0 %}
+                                                    <td> {{ win.win2_ev }}
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-success rounded" role="progressbar" style="width: {{ win2_ev_int }}%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    {% else %}
+                                                    <td> {{ win.win2_ev }}
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-danger rounded" role="progressbar" style="width: {{ win2_ev_int }}%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    {% endif %}
+                                                    <td> {{ win.win2_site }}
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-info rounded" role="progressbar" style="width: 100%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td> <!-- Probably just make this date, and maybe make the bar based upon how close or how far time.now is from the actual event. -->
+                                                        <div>
+                                                            <div></div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            {% endfor %}
+                                        {% endif %}
+                                            
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- TOTAL TABLE -->
+                        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                            <div class="table-responsive">
+                                <div class="customer-scroll2" style="height:362px;position:relative;">
+                                    <table class="table table-hover m-b-0">
+                                        <thead>
+                                            <tr class="dark-mode">
+                                                <th><span>Teams</span></th>
+                                                <th>
+                                                    <div class="ctooltip">
+                                                        <span class="ctooltiptext">Maximum Spreads</span>
+                                                        <span>Spread <a class="help" ><i class="feather icon-help-circle f-16"></i></a></span>
+                                                    </div>
+        
+                                                </th>
+                                                <th>
+                                                    <div class="ctooltip">
+                                                        <span class="ctooltiptext">True Probability Averaged</span>
+                                                        <span>Probability <a class="help" ><i class="feather icon-help-circle f-16"></i></a></span>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="ctooltip">
+                                                        <span class="ctooltiptext">Expected Value Averaged</span>
+                                                        <span>EV <a class="help" ><i class="feather icon-help-circle f-16"></i></a></span>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="ctooltip">
+                                                        <span class="ctooltiptext">Website(s) with Highest Payout</span>
+                                                        <span>Website <a class="help" ><i class="feather icon-help-circle f-16"></i></a></span>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div class="ctooltip">
+                                                        <span class="ctooltiptext">All date times in 24 hour format </span>
+                                                        <span>Date <a class="help" ><i class="feather icon-help-circle f-16"></i></a></span>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        
+                                            
+                                        {% if total_zip %} 
+                                            {% for total, total1_ev_int, total2_ev_int, total1_decimal_int, total2_decimal_int in total_zip %}
+                                            <!-- Total Tbody -->
+                                            <tbody>
+                                                <tr>
+                                                    <td rowspan="2"> {{ total.team1 }} <br> VS <br> {{ total.team2 }}
+                                                        </td>
+                                                        <td class="scores-total" id="scores-total"> ({{ total.total_over }})
+                                                            <span id="total-text" class="ml12" >  {{ total.total1_decimal }} </span>
+                                                            <div class="progress mt-1" style="height:4px;">
+                                                                <div class="progress-bar bg-danger rounded" role="progressbar" style="width: {{ total1_decimal_int }}%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                            </div>
+                                                        </td>
+        
+                                                    </td>
+                                                    <td id="probability-1">  {{ total.total1_probability }}%
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-primary rounded" role="progressbar" style="width: {{ total.total1_probability }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    {% if total.total1_ev > 0 %}
+                                                    <td> {{ total.total1_ev }}
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-success rounded" role="progressbar" style="width: {{ total1_ev_int }}%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    {% else %}
+                                                    <td> {{ total.total1_ev }} 
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-danger rounded" role="progressbar" style="width: {{ total1_ev_int }}%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    {% endif %}
+                                                    <td> {{ total.total1_site }}
+                                                        <div class="progress mt-1" style="height:4px;"> 
+                                                            <div class="progress-bar bg-info rounded" role="progressbar" style="width: 100%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td> {{ total.date }}
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-warning rounded" role="progressbar" style="width: 100%;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <!-- Row 2 -->
+                                                <tr>
+                                                    <td class="scores-total" id="scores-total"> ({{total.total_under}}) 
+                                                        <span id="total-text"> {{ total.total2_decimal }} </span>
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-danger rounded" role="progressbar" style="width: {{ total2_decimal_int }}%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td id="probability-2"> {{ total.total2_probability }}%
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-primary rounded" role="progressbar" style="width: {{ total.total2_probability }}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    {% if total2.total2_ev > 0 %}
+                                                    <td> {{ total.total2_ev }}
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-success rounded" role="progressbar" style="width: {{ total2_ev_int }}%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    {% else %}
+                                                    <td> {{ total.total2_ev }}
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-danger rounded" role="progressbar" style="width: {{ total2_ev_int }}%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    {% endif %}
+                                                    <td> {{ total.total2_site }}
+                                                        <div class="progress mt-1" style="height:4px;">
+                                                            <div class="progress-bar bg-info rounded" role="progressbar" style="width: 100%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td> <!-- Probably just make this date, and maybe make the bar based upon how close or how far time.now is from the actual event. -->
+                                                        <div>
+                                                            <div></div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            
+                                            
+        
+                                            {% endfor %}
+                                        {% endif %}
+                                            
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- PLACE OLD BEST HERE -->
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+</div>
+
+<!-- Figure out how to replace images and classes for stuff like the shopping cart and all that. -->
+
+
+
+
+<!-- Table Start -->
+
+
+
+<!-- Table end -->
+
+
+<!-- [ Main Content ] end -->
+{% endblock content %}
+{% block extrajs %}
+<!-- custom-chart js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+<script src="{% static 'assets/js/pages/dashboard-main.js' %}"></script>
+<!-- <script src="{% static 'assets/js/pages/esports.js' %}" type="text/javascript"></script> -->
+<script src="{% static 'esports/esports.js' %}"></script>
+<!-- For dark and light mode-->
+<script src="{% static 'theme.js' %}"></script>
+<!-- Apex Chart -->
+<script src="{% static 'assets/js/plugins/apexcharts.min.js' %}"></script>
+{% endblock extrajs %}
+
+
+
+
+
+
+<!-- SAVE FOR LATER 
+<tr>
+                                        <td>{{ score.team1 }} VS {{ score.team2 }} </td>
+                                        <td class="scores-spread" id="score-spread">{{ score.spread1 }}
+                                            <div class="progress mt-1" style="height:4px;">
+                                                <div class="progress-bar bg-danger rounded" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </td>
+                                        <td>{{ score.spread2 }}
+                                            <div class="progress mt-1" style="height:4px;">
+                                                <div class="progress-bar bg-primary rounded" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </td>
+                                        <td>{{ score.date }} Probably just make this date, and maybe make the bar based upon how close or how far time.now is from the actual event. 
+                                            <div class="progress mt-1" style="height:4px;">
+                                                <div class="progress-bar bg-warning rounded" role="progressbar" style="width: 100%;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </td>
+                                        <td>45,3%
+                                            <div class="progress mt-1" style="height:4px;">
+                                                <div class="progress-bar bg-success rounded" role="progressbar" style="width: 60%;" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </td>
+                                        <td>6,7%
+                                            <div class="progress mt-1" style="height:4px;">
+                                                <div class="progress-bar bg-info rounded" role="progressbar" style="width: 30%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+-->
+

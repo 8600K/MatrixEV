@@ -1,0 +1,78 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+<!-- [ Main Content ] start -->
+<canvas style="position: fixed; top: 0; left: 0; z-index: -1;"></canvas>
+<div class="row">
+
+    <!-- order-card start -->
+    
+    <div class="col-md-6 col-xl-3 centered-card">
+        <div class="card bg-c-fuschia order-card clickable-card">
+            <div class="card-body">
+                <h5 class="text-white text-center"><a href="{% url 'home:about' %}" class="link-card"><u>About Us</u></a></h5>
+                <h6 class="text-end text-white"><i class="feather icon-info float-start"></i><span></span></h6>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card bg-c-fuschia order-card clickable-card">
+            <div class="card-body">
+                <h5 class="text-white text-center"><a target="_blank" rel="noopener noreferrer" href="https://ko-fi.com/matrixev" class="link-card"><u>Buy me a Ko-Fi</u></a></h5>
+                <h6 class="text-end text-white"><i class="feather icon-heart float-start"></i><span></span></h6>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <!-- order-card start -->
+    <div class="col-md-6 col-xl-3">
+        <div class="card bg-c-fuschia order-card clickable-card">
+            <div class="card-body">
+                <h3 class="text-center"><a href="{% url 'esports:league-of-legends' %}" class="link-card"><u>League of Legends</u></a></h3>
+                <h6 class="text-end text-white"><i class="feather icon-shield float-start"></i><span></span></h6>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card bg-c-fuschia order-card clickable-card">
+            <div class="card-body">
+                <h3 class="text-white text-center"><a href="{% url 'home:work-in-progress' %}" class="link-card"><u>Call of Duty (Work in Progress)</u></a></h3>
+                <h6 class="text-end text-white"><i class="feather icon-target float-start"></i><span></span></h6>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card bg-c-fuschia order-card clickable-card">
+            <div class="card-body">
+                <h3 class="text-white text-center"><a href="{% url 'home:work-in-progress' %}" class="link-card"><u>CS:2 (Work in Progress)</u></a></h3>
+                <h6 class="text-end text-white"><i class="feather icon-user float-start"></i><span></span></h6>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-xl-3">
+        <div class="card bg-c-fuschia order-card clickable-card">
+            <div class="card-body">
+                <h3 class="text-white text-center"><a href="{% url 'home:work-in-progress' %}" class="link-card"><u>Dota 2 (Work in Progress)</u></a></h3>
+                <h6 class="text-end text-white"><i class="feather icon-move float-start"></i><span></span></h6>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer overview end -->
+    
+</div>
+
+<!-- [ Main Content ] end -->
+{% endblock content %}
+{% block extrajs %}
+<!-- custom-chart js -->
+<script src="{% static 'assets/js/pages/dashboard-main.js' %}"></script>
+<!-- Matrix Canvas js-->
+<script src="{% static 'home/index.js' %}"></script>
+
+<!-- Apex Chart -->
+<script src="{% static 'assets/js/plugins/apexcharts.min.js' %}"></script>
+{% endblock extrajs %}

@@ -1,0 +1,61 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+<!-- [ Main Content ] start -->
+<canvas style="position: fixed; top: 0; left: 0; z-index: -1;"></canvas>
+
+<div class="col-lg-9 col-md-12">
+    <div class="card centered-card">
+        <div class="card-header text-center">
+            <h2 class="text-white">About Us</h2>
+        </div>
+        <div class="card-body text-white">
+            <p>Hello and welcome to MatrixEV.
+                We are a free to use website specialziing in helping betters find better (see what we did there?) value with their eSports bets. We are NOT a sportsbook and we do not give any guarentees that our numbers will win you money! How you choose to spend your money is ultimately up to you.
+                <br>
+                What we do offer are things like Expected Value, vigorish free probabilities, and the best sites to place your bets.
+                <br>
+                While we do not have every sportbook's data, we gather data from many different sportsbooks, find matching odds, and then compare these odds with each other. This lets us give you the best place to put your bet. For example, if you
+                wanted to bet on Your Team vs Opposing Team, you might want to check our site first, as we will tell you where you can get the highest value for your money. 
+                <p>
+                    We also remove the vigorish from these sites and give you the True Probability of the match determined by the average from every sportsbook the match is taking place on. 
+                    <br>
+                    And with all of this data, we also calculate the Expected Value of the match using a $100 wager as our base. 
+                    <br>
+                    "But what is Expected Value" I can hear you saying. Fear not! Let us at MatrixEV explain the fun math behind Expected Value. 
+                    <br>
+                    <br>
+                    Firstly, a couple of things to note. True probability is the probability of the bet with the vigorish removed. Vigorish is the "juice" the sportsbooks use to ensure they turn a profit. How it works is if you add up a given sportsbooks's 
+                    probability, you will notice it does not add up to a perfect 100%. This is essentially a fee they charge you to bet on a match to ensure they make a profit. This number must first be removed in order to calculate expected value. 
+                    Next, expected value is theoretical. Betting still requires you to win the actual bet, and in sports or this case esports, anything can happen. Expected probability just uses the sportsbook's own applied odds vs each other and finds bets that show a gain in profit over time with
+                    the probabilities shown. 
+                    <br>
+                    <br>
+                    Now, for the actual math. We take the averaged true probability from the sportsbooks hosting the same match and multiply that by the maximum payout or the payout from the site that gives the highest money for your wager. The product of that is then subtracted by the product of the wager
+                    itself, in this case $100 is our base wager to keep everything even and easy to read - and the true averaged probability the match will lose. It looks like this (x * y) - (x1 * y1) where x is the true averaged probability, y is the amount to win, x1 is the true probability of the match
+                    losing and y1 is our current wager ($100). 
+                </p>
+            </p>
+            <p>
+                This site is still a work in progress, run by a single person so as of now only League of Legends is currently in operation. More sports will be added over time!
+                Currently, we only work with game lines such as win, spread, and total. We know player and map props are a large part of the esports betting scene, but at this time we are committed to getting all the major sports up and running smoothly before including those. 
+            </p>
+        </div>
+    </div>
+</div>
+
+    <!-- Customer overview end -->
+    <canvas style="position: fixed; top: 0; left: 0;"></canvas>
+</div>
+
+<!-- [ Main Content ] end -->
+{% endblock content %}
+{% block extrajs %}
+<!-- custom-chart js -->
+<script src="{% static 'assets/js/pages/dashboard-main.js' %}"></script>
+<!-- Matrix Canvas js-->
+<script src="{% static 'home/index.js' %}"></script>
+
+<!-- Apex Chart -->
+<script src="{% static 'assets/js/plugins/apexcharts.min.js' %}"></script>
+{% endblock extrajs %}
