@@ -6,10 +6,10 @@
 /docs/_build/
 /node_modules/
 build/
-env
-/staticfiles/
+#env
+#/staticfiles/
 
 #src
-*.sqlite*
+#*.sqlite*
 
-.env
+#.env
